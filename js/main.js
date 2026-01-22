@@ -206,7 +206,7 @@ function showConfirmationModal(data, whatsappMessage) {
             <p>Thank you <strong>${data.name}</strong>, we have received your appointment request for <strong>${formatDate(data.date)}</strong> at <strong>${data.time}</strong>.</p>
             <p class="confirmation-note">We will confirm your appointment via WhatsApp or phone shortly.</p>
             <div class="confirmation-buttons">
-                <a href="https://wa.me/4367844179331?text=${whatsappMessage}" class="btn btn-primary" target="_blank" rel="noopener">
+                <a href="https://wa.me/?text=${whatsappMessage}" class="btn btn-primary" target="_blank" rel="noopener">
                     <i class="fab fa-whatsapp"></i> Confirm via WhatsApp
                 </a>
                 <button class="btn btn-outline-dark close-modal">Close</button>
