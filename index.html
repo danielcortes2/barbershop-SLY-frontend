@@ -1,0 +1,779 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="SLY Salon - Your trusted barbershop in Fellbach. Professional haircuts, classic shaves and beard treatments. Book your appointment online.">
+    <meta name="keywords" content="barbershop, hairdresser, haircut, shave, beard, Fellbach, Stuttgart, SLY Salon, Suleiman">
+    <meta name="author" content="SLY Salon">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://slysalon.de/">
+    <meta property="og:title" content="SLY Salon - Professional Barbershop in Fellbach">
+    <meta property="og:description" content="Your trusted barbershop. Professional haircuts, classic shaves and beard treatments.">
+    <meta property="og:image" content="assets/images/og-image.jpg">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="css/styles.css">
+    
+    <title>SLY Salon - Professional Barbershop Fellbach | Book Your Appointment</title>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar" id="navbar">
+        <div class="container nav-container">
+            <a href="#" class="logo">
+                <span class="logo-text">SLY</span>
+                <span class="logo-sub">SALON</span>
+            </a>
+            <button class="nav-toggle" id="navToggle" aria-label="Open menu">
+                <span class="hamburger"></span>
+            </button>
+            <ul class="nav-menu" id="navMenu">
+                <li><a href="#home" class="nav-link">Home</a></li>
+                <li><a href="#services" class="nav-link">Services</a></li>
+                <li><a href="#gallery" class="nav-link">Gallery</a></li>
+                <li><a href="#team" class="nav-link">Team</a></li>
+                <li><a href="#reviews" class="nav-link">Reviews</a></li>
+                <li><a href="#contact" class="nav-link">Contact</a></li>
+                <li><a href="#booking" class="nav-link btn-nav">Book Now</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <h1 class="hero-title">
+                <span class="hero-title-main">SLY</span>
+                <span class="hero-title-sub">SALON</span>
+            </h1>
+            <p class="hero-tagline">Where Style Meets Tradition</p>
+            <p class="hero-description">Experts in classic and modern cuts. Over 15 years of experience taking care of your image.</p>
+            <div class="hero-buttons">
+                <a href="#booking" class="btn btn-primary btn-lg">
+                    <i class="fas fa-calendar-check"></i>
+                    Book Appointment
+                </a>
+                <a href="#services" class="btn btn-outline btn-lg">
+                    <i class="fas fa-scissors"></i>
+                    View Services
+                </a>
+            </div>
+            <div class="hero-info">
+                <div class="hero-info-item">
+                    <i class="fas fa-clock"></i>
+                    <span>Mon - Sat: 9:00 - 20:00</span>
+                </div>
+                <div class="hero-info-item">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <span>Fellbacher Str. 35, Fellbach</span>
+                </div>
+                <div class="hero-info-item">
+                    <i class="fas fa-phone"></i>
+                    <span>+43 678 44179331</span>
+                </div>
+            </div>
+        </div>
+        <a href="#services" class="scroll-indicator">
+            <span>Discover more</span>
+            <i class="fas fa-chevron-down"></i>
+        </a>
+    </section>
+
+    <!-- Services Section -->
+    <section class="services" id="services">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">Our Services</span>
+                <h2 class="section-title">The Best for Your Style</h2>
+                <p class="section-description">We offer a wide range of professional services for your hair and beard care</p>
+            </div>
+            
+            <div class="services-grid">
+                <!-- Service 1 -->
+                <div class="service-card">
+                    <div class="service-image">
+                        <img src="https://images.unsplash.com/photo-1599351431202-1e0f0137899a?w=400&h=300&fit=crop" alt="Classic haircut">
+                        <div class="service-price">€25</div>
+                    </div>
+                    <div class="service-content">
+                        <h3>Classic Cut</h3>
+                        <p>Traditional cut with scissors and clippers, includes wash and final styling.</p>
+                        <span class="service-duration"><i class="fas fa-clock"></i> 30 min</span>
+                    </div>
+                </div>
+
+                <!-- Service 2 -->
+                <div class="service-card">
+                    <div class="service-image">
+                        <img src="https://images.unsplash.com/photo-1621605815971-fbc98d665033?w=400&h=300&fit=crop" alt="Fade haircut">
+                        <div class="service-price">€30</div>
+                    </div>
+                    <div class="service-content">
+                        <h3>Fade Cut</h3>
+                        <p>Professional fade with different gradient levels according to your preference.</p>
+                        <span class="service-duration"><i class="fas fa-clock"></i> 40 min</span>
+                    </div>
+                </div>
+
+                <!-- Service 3 -->
+                <div class="service-card">
+                    <div class="service-image">
+                        <img src="https://images.unsplash.com/photo-1503951914875-452162b0f3f1?w=400&h=300&fit=crop" alt="Classic shave">
+                        <div class="service-price">€20</div>
+                    </div>
+                    <div class="service-content">
+                        <h3>Classic Shave</h3>
+                        <p>Traditional shave with straight razor, hot towel and premium products.</p>
+                        <span class="service-duration"><i class="fas fa-clock"></i> 25 min</span>
+                    </div>
+                </div>
+
+                <!-- Service 4 -->
+                <div class="service-card">
+                    <div class="service-image">
+                        <img src="https://images.unsplash.com/photo-1622286342621-4bd786c2447c?w=400&h=300&fit=crop" alt="Beard trim">
+                        <div class="service-price">€15</div>
+                    </div>
+                    <div class="service-content">
+                        <h3>Beard Trim</h3>
+                        <p>Beard shaping and trimming with professional finish.</p>
+                        <span class="service-duration"><i class="fas fa-clock"></i> 20 min</span>
+                    </div>
+                </div>
+
+                <!-- Service 5 -->
+                <div class="service-card">
+                    <div class="service-image">
+                        <img src="https://images.unsplash.com/photo-1605497788044-5a32c7078486?w=400&h=300&fit=crop" alt="Haircut and beard">
+                        <div class="service-price">€40</div>
+                    </div>
+                    <div class="service-content">
+                        <h3>Cut + Beard</h3>
+                        <p>Complete package: haircut and beard trim with treatment.</p>
+                        <span class="service-duration"><i class="fas fa-clock"></i> 50 min</span>
+                    </div>
+                </div>
+
+                <!-- Service 6 -->
+                <div class="service-card">
+                    <div class="service-image">
+                        <img src="https://images.unsplash.com/photo-1596728325488-58c87691e9af?w=400&h=300&fit=crop" alt="Hair treatment">
+                        <div class="service-price">€35</div>
+                    </div>
+                    <div class="service-content">
+                        <h3>Hair Treatment</h3>
+                        <p>Deep hydration, scalp massage and premium nourishing products.</p>
+                        <span class="service-duration"><i class="fas fa-clock"></i> 45 min</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="services-cta">
+                <p>Ready to refresh your look?</p>
+                <a href="#booking" class="btn btn-primary btn-lg">
+                    <i class="fas fa-calendar-check"></i>
+                    Book Now
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Gallery Section -->
+    <section class="gallery" id="gallery">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">Our Work</span>
+                <h2 class="section-title">Results Gallery</h2>
+                <p class="section-description">Discover some of our best work</p>
+            </div>
+            
+            <div class="gallery-grid">
+                <div class="gallery-item gallery-item-large">
+                    <img src="https://images.unsplash.com/photo-1599351431168-e3e9c7e41d7c?w=600&h=400&fit=crop" alt="Barbershop work 1">
+                    <div class="gallery-overlay">
+                        <i class="fas fa-search-plus"></i>
+                    </div>
+                </div>
+                <div class="gallery-item">
+                    <img src="https://images.unsplash.com/photo-1621605815971-fbc98d665033?w=400&h=400&fit=crop" alt="Barbershop work 2">
+                    <div class="gallery-overlay">
+                        <i class="fas fa-search-plus"></i>
+                    </div>
+                </div>
+                <div class="gallery-item">
+                    <img src="https://images.unsplash.com/photo-1503951914875-452162b0f3f1?w=400&h=400&fit=crop" alt="Barbershop work 3">
+                    <div class="gallery-overlay">
+                        <i class="fas fa-search-plus"></i>
+                    </div>
+                </div>
+                <div class="gallery-item">
+                    <img src="https://images.unsplash.com/photo-1622286342621-4bd786c2447c?w=400&h=400&fit=crop" alt="Barbershop work 4">
+                    <div class="gallery-overlay">
+                        <i class="fas fa-search-plus"></i>
+                    </div>
+                </div>
+                <div class="gallery-item">
+                    <img src="https://images.unsplash.com/photo-1585747860715-2ba37e788b70?w=400&h=400&fit=crop" alt="Barbershop work 5">
+                    <div class="gallery-overlay">
+                        <i class="fas fa-search-plus"></i>
+                    </div>
+                </div>
+                <div class="gallery-item gallery-item-tall">
+                    <img src="https://images.unsplash.com/photo-1582095133179-bfd08e2fc6b3?w=400&h=600&fit=crop" alt="Barbershop work 6">
+                    <div class="gallery-overlay">
+                        <i class="fas fa-search-plus"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Team Section -->
+    <section class="team" id="team">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">Our Team</span>
+                <h2 class="section-title">Expert Professionals</h2>
+                <p class="section-description">Meet the master barbers who will work magic with your style</p>
+            </div>
+            
+            <div class="team-grid">
+                <!-- Team Member 1 -->
+                <div class="team-card">
+                    <div class="team-image">
+                        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop" alt="Suleiman - Master Barber">
+                        <div class="team-social">
+                            <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                            <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
+                        </div>
+                    </div>
+                    <div class="team-content">
+                        <h3>Suleiman</h3>
+                        <span class="team-role">Master Barber & Founder</span>
+                        <div class="team-badges">
+                            <span class="badge"><i class="fas fa-award"></i> Master Barber</span>
+                            <span class="badge"><i class="fas fa-trophy"></i> 15+ years exp.</span>
+                        </div>
+                        <p>Specialist in classic cuts and traditional straight razor shaving techniques.</p>
+                    </div>
+                </div>
+
+                <!-- Team Member 2 -->
+                <div class="team-card">
+                    <div class="team-image">
+                        <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&h=400&fit=crop" alt="Michael - Senior Barber">
+                        <div class="team-social">
+                            <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                            <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
+                        </div>
+                    </div>
+                    <div class="team-content">
+                        <h3>Michael</h3>
+                        <span class="team-role">Senior Barber</span>
+                        <div class="team-badges">
+                            <span class="badge"><i class="fas fa-certificate"></i> Pro Certified</span>
+                            <span class="badge"><i class="fas fa-star"></i> Fades</span>
+                        </div>
+                        <p>Expert in fades and modern styles. Winner of the regional barbering competition 2024.</p>
+                    </div>
+                </div>
+
+                <!-- Team Member 3 -->
+                <div class="team-card">
+                    <div class="team-image">
+                        <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&h=400&fit=crop" alt="David - Barber">
+                        <div class="team-social">
+                            <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                            <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
+                        </div>
+                    </div>
+                    <div class="team-content">
+                        <h3>David</h3>
+                        <span class="team-role">Barber & Stylist</span>
+                        <div class="team-badges">
+                            <span class="badge"><i class="fas fa-palette"></i> Colorimetry</span>
+                            <span class="badge"><i class="fas fa-cut"></i> 8 years exp.</span>
+                        </div>
+                        <p>Specialized in coloring techniques and personalized designs.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Reviews Section -->
+    <section class="reviews" id="reviews">
+        <div class="container">
+            <div class="section-header section-header-light">
+                <span class="section-tag">Reviews</span>
+                <h2 class="section-title">What Our Clients Say</h2>
+                <div class="reviews-rating">
+                    <div class="stars">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star-half-alt"></i>
+                    </div>
+                    <span class="rating-text">4.9/5 on Google Reviews (127 reviews)</span>
+                </div>
+            </div>
+            
+            <div class="reviews-slider" id="reviewsSlider">
+                <div class="reviews-track">
+                    <!-- Review 1 -->
+                    <div class="review-card">
+                        <div class="review-header">
+                            <img src="https://images.unsplash.com/photo-1599566150163-29194dcabd36?w=60&h=60&fit=crop" alt="Client avatar" class="review-avatar">
+                            <div class="review-info">
+                                <h4>Alexander Schmidt</h4>
+                                <div class="review-stars">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                </div>
+                            </div>
+                            <img src="https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_92x30dp.png" alt="Google" class="review-platform">
+                        </div>
+                        <p class="review-text">"The best barbershop in the area without a doubt. Suleiman is an artist with scissors. I've been coming for 3 years and he has never disappointed me. Great atmosphere and very professional."</p>
+                        <span class="review-date">2 weeks ago</span>
+                    </div>
+
+                    <!-- Review 2 -->
+                    <div class="review-card">
+                        <div class="review-header">
+                            <img src="https://images.unsplash.com/photo-1527980965255-d3b416303d12?w=60&h=60&fit=crop" alt="Client avatar" class="review-avatar">
+                            <div class="review-info">
+                                <h4>Thomas Weber</h4>
+                                <div class="review-stars">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                </div>
+                            </div>
+                            <img src="https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_92x30dp.png" alt="Google" class="review-platform">
+                        </div>
+                        <p class="review-text">"Excellent service and attention. The online booking system is very convenient. The fade Michael gave me was perfect. 100% recommended."</p>
+                        <span class="review-date">1 month ago</span>
+                    </div>
+
+                    <!-- Review 3 -->
+                    <div class="review-card">
+                        <div class="review-header">
+                            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=60&h=60&fit=crop" alt="Client avatar" class="review-avatar">
+                            <div class="review-info">
+                                <h4>Martin Müller</h4>
+                                <div class="review-stars">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                </div>
+                            </div>
+                            <img src="https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_92x30dp.png" alt="Google" class="review-platform">
+                        </div>
+                        <p class="review-text">"Very cozy atmosphere, impeccable hygiene and the products they use are top quality. The hot towel shave is an experience you must try."</p>
+                        <span class="review-date">1 month ago</span>
+                    </div>
+
+                    <!-- Review 4 -->
+                    <div class="review-card">
+                        <div class="review-header">
+                            <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=60&h=60&fit=crop" alt="Client avatar" class="review-avatar">
+                            <div class="review-info">
+                                <h4>Laura Fischer</h4>
+                                <div class="review-stars">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star-half-alt"></i>
+                                </div>
+                            </div>
+                            <img src="https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_92x30dp.png" alt="Google" class="review-platform">
+                        </div>
+                        <p class="review-text">"I took my son for the first time and the treatment was incredible. Very patient with kids. The cut looked great and my son left delighted."</p>
+                        <span class="review-date">2 months ago</span>
+                    </div>
+                </div>
+                
+                <div class="reviews-nav">
+                    <button class="reviews-nav-btn prev" id="prevReview" aria-label="Previous">
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                    <button class="reviews-nav-btn next" id="nextReview" aria-label="Next">
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="reviews-cta">
+                <a href="https://g.page/slysalon/review" target="_blank" rel="noopener" class="btn btn-outline-light">
+                    <i class="fab fa-google"></i>
+                    View All Reviews
+                </a>
+                <a href="#booking" class="btn btn-primary btn-lg">
+                    <i class="fas fa-calendar-check"></i>
+                    Book Appointment
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Quality Section -->
+    <section class="quality">
+        <div class="container">
+            <div class="quality-grid">
+                <div class="quality-item">
+                    <div class="quality-icon">
+                        <i class="fas fa-shield-virus"></i>
+                    </div>
+                    <h3>Certified Hygiene</h3>
+                    <p>All our instruments are sterilized after each use. We comply with all health protocols.</p>
+                </div>
+                <div class="quality-item">
+                    <div class="quality-icon">
+                        <i class="fas fa-gem"></i>
+                    </div>
+                    <h3>Premium Products</h3>
+                    <p>We only use top brand products to guarantee the best results and care for your hair.</p>
+                </div>
+                <div class="quality-item">
+                    <div class="quality-icon">
+                        <i class="fas fa-graduation-cap"></i>
+                    </div>
+                    <h3>Continuous Training</h3>
+                    <p>Our team constantly updates with the latest techniques and trends in the industry.</p>
+                </div>
+                <div class="quality-item">
+                    <div class="quality-icon">
+                        <i class="fas fa-heart"></i>
+                    </div>
+                    <h3>Passion for the Craft</h3>
+                    <p>Over 15 years of experience back us up. We love what we do and it shows in every cut.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Booking Section -->
+    <section class="booking" id="booking">
+        <div class="container">
+            <div class="booking-wrapper">
+                <div class="booking-info">
+                    <span class="section-tag">Online Booking</span>
+                    <h2 class="section-title">Book Your Appointment</h2>
+                    <p>Choose the day and time that suits you best. We'll confirm your appointment via WhatsApp or email.</p>
+                    
+                    <div class="booking-features">
+                        <div class="booking-feature">
+                            <i class="fas fa-check-circle"></i>
+                            <span>Book in less than 2 minutes</span>
+                        </div>
+                        <div class="booking-feature">
+                            <i class="fas fa-check-circle"></i>
+                            <span>Instant confirmation</span>
+                        </div>
+                        <div class="booking-feature">
+                            <i class="fas fa-check-circle"></i>
+                            <span>24h reminder</span>
+                        </div>
+                        <div class="booking-feature">
+                            <i class="fas fa-check-circle"></i>
+                            <span>Free cancellation</span>
+                        </div>
+                    </div>
+
+                    <div class="booking-contact">
+                        <p>Prefer to call?</p>
+                        <a href="tel:+4367844179331" class="phone-link">
+                            <i class="fas fa-phone"></i>
+                            +43 678 44179331
+                        </a>
+                        <a href="https://wa.me/4367844179331" class="whatsapp-link" target="_blank" rel="noopener">
+                            <i class="fab fa-whatsapp"></i>
+                            WhatsApp
+                        </a>
+                    </div>
+                </div>
+
+                <div class="booking-form-wrapper">
+                    <form class="booking-form" id="bookingForm">
+                        <div class="form-group">
+                            <label for="bookingName">Full name *</label>
+                            <input type="text" id="bookingName" name="name" required placeholder="Your name">
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="bookingPhone">Phone *</label>
+                                <input type="tel" id="bookingPhone" name="phone" required placeholder="+43 678 123 456">
+                            </div>
+                            <div class="form-group">
+                                <label for="bookingEmail">Email</label>
+                                <input type="email" id="bookingEmail" name="email" placeholder="your@email.com">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="bookingService">Service *</label>
+                            <select id="bookingService" name="service" required>
+                                <option value="">Select a service</option>
+                                <option value="classic-cut">Classic Cut - €25</option>
+                                <option value="fade-cut">Fade Cut - €30</option>
+                                <option value="shave">Classic Shave - €20</option>
+                                <option value="beard-trim">Beard Trim - €15</option>
+                                <option value="cut-beard">Cut + Beard - €40</option>
+                                <option value="treatment">Hair Treatment - €35</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="bookingBarber">Preferred barber</label>
+                            <select id="bookingBarber" name="barber">
+                                <option value="">No preference</option>
+                                <option value="suleiman">Suleiman</option>
+                                <option value="michael">Michael</option>
+                                <option value="david">David</option>
+                            </select>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="bookingDate">Date *</label>
+                                <input type="date" id="bookingDate" name="date" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="bookingTime">Time *</label>
+                                <select id="bookingTime" name="time" required>
+                                    <option value="">Select time</option>
+                                    <option value="09:00">09:00</option>
+                                    <option value="09:30">09:30</option>
+                                    <option value="10:00">10:00</option>
+                                    <option value="10:30">10:30</option>
+                                    <option value="11:00">11:00</option>
+                                    <option value="11:30">11:30</option>
+                                    <option value="12:00">12:00</option>
+                                    <option value="12:30">12:30</option>
+                                    <option value="13:00">13:00</option>
+                                    <option value="16:00">16:00</option>
+                                    <option value="16:30">16:30</option>
+                                    <option value="17:00">17:00</option>
+                                    <option value="17:30">17:30</option>
+                                    <option value="18:00">18:00</option>
+                                    <option value="18:30">18:30</option>
+                                    <option value="19:00">19:00</option>
+                                    <option value="19:30">19:30</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="bookingNotes">Additional notes</label>
+                            <textarea id="bookingNotes" name="notes" rows="3" placeholder="Anything we should know?"></textarea>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary btn-block">
+                            <i class="fas fa-calendar-check"></i>
+                            Confirm Booking
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="contact" id="contact">
+        <div class="container">
+            <div class="contact-wrapper">
+                <div class="contact-info">
+                    <span class="section-tag">Contact</span>
+                    <h2 class="section-title">Have Any Questions?</h2>
+                    <p>We're here to help. Contact us through any of these channels.</p>
+                    
+                    <div class="contact-details">
+                        <div class="contact-item">
+                            <div class="contact-icon">
+                                <i class="fas fa-map-marker-alt"></i>
+                            </div>
+                            <div class="contact-text">
+                                <h4>Address</h4>
+                                <p>Fellbacher Str. 35<br>70736 Fellbach, Germany</p>
+                            </div>
+                        </div>
+                        
+                        <div class="contact-item">
+                            <div class="contact-icon">
+                                <i class="fas fa-clock"></i>
+                            </div>
+                            <div class="contact-text">
+                                <h4>Hours</h4>
+                                <p>Monday - Friday: 9:00 - 20:00<br>Saturday: 9:00 - 15:00<br>Sunday: Closed</p>
+                            </div>
+                        </div>
+                        
+                        <div class="contact-item">
+                            <div class="contact-icon">
+                                <i class="fas fa-phone"></i>
+                            </div>
+                            <div class="contact-text">
+                                <h4>Phone</h4>
+                                <p><a href="tel:+4367844179331">+43 678 44179331</a></p>
+                            </div>
+                        </div>
+                        
+                        <div class="contact-item">
+                            <div class="contact-icon">
+                                <i class="fas fa-envelope"></i>
+                            </div>
+                            <div class="contact-text">
+                                <h4>Email</h4>
+                                <p><a href="mailto:info@slysalon.de">info@slysalon.de</a></p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="contact-social">
+                        <h4>Follow Us</h4>
+                        <div class="social-links">
+                            <a href="#" aria-label="Instagram" class="social-link">
+                                <i class="fab fa-instagram"></i>
+                            </a>
+                            <a href="#" aria-label="Facebook" class="social-link">
+                                <i class="fab fa-facebook-f"></i>
+                            </a>
+                            <a href="#" aria-label="TikTok" class="social-link">
+                                <i class="fab fa-tiktok"></i>
+                            </a>
+                            <a href="https://wa.me/4367844179331" aria-label="WhatsApp" class="social-link" target="_blank" rel="noopener">
+                                <i class="fab fa-whatsapp"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="contact-map">
+                    <iframe 
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2627.8!2d9.276!3d48.811!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4799cf2a9ff7f08f%3A0xde6816a483d7a956!2sSLY%20Salon%2C%20Fellbacher%20Str.%2035%2C%2070736%20Fellbach!5e0!3m2!1sen!2sde!4v1706000000000"
+                        width="100%" 
+                        height="100%" 
+                        style="border:0;" 
+                        allowfullscreen="" 
+                        loading="lazy" 
+                        referrerpolicy="no-referrer-when-downgrade"
+                        title="SLY Salon Location">
+                    </iframe>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <a href="#" class="logo">
+                        <span class="logo-text">SLY</span>
+                        <span class="logo-sub">SALON</span>
+                    </a>
+                    <p>Over 15 years taking care of your image. Experts in classic and modern cuts.</p>
+                    <div class="footer-social">
+                        <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                        <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" aria-label="TikTok"><i class="fab fa-tiktok"></i></a>
+                    </div>
+                </div>
+
+                <div class="footer-links">
+                    <h4>Navigation</h4>
+                    <ul>
+                        <li><a href="#home">Home</a></li>
+                        <li><a href="#services">Services</a></li>
+                        <li><a href="#gallery">Gallery</a></li>
+                        <li><a href="#team">Team</a></li>
+                        <li><a href="#reviews">Reviews</a></li>
+                        <li><a href="#contact">Contact</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-links">
+                    <h4>Services</h4>
+                    <ul>
+                        <li><a href="#services">Classic Cut</a></li>
+                        <li><a href="#services">Fade Cut</a></li>
+                        <li><a href="#services">Classic Shave</a></li>
+                        <li><a href="#services">Beard Trim</a></li>
+                        <li><a href="#services">Hair Treatment</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-contact">
+                    <h4>Contact</h4>
+                    <ul>
+                        <li><i class="fas fa-map-marker-alt"></i> Fellbacher Str. 35, Fellbach</li>
+                        <li><i class="fas fa-phone"></i> <a href="tel:+4367844179331">+43 678 44179331</a></li>
+                        <li><i class="fas fa-envelope"></i> <a href="mailto:info@slysalon.de">info@slysalon.de</a></li>
+                    </ul>
+                    <a href="#booking" class="btn btn-primary btn-sm">Book Appointment</a>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <div class="footer-legal">
+                    <a href="legal-notice.html">Legal Notice</a>
+                    <a href="privacy-policy.html">Privacy Policy</a>
+                    <a href="cookies.html">Cookies</a>
+                    <a href="terms.html">Terms & Conditions</a>
+                </div>
+                <p class="copyright">&copy; 2026 SLY Salon. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- WhatsApp Floating Button -->
+    <a href="https://wa.me/4367844179331" class="whatsapp-float" target="_blank" rel="noopener" aria-label="Contact via WhatsApp">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+
+    <!-- Back to Top Button -->
+    <button class="back-to-top" id="backToTop" aria-label="Back to top">
+        <i class="fas fa-chevron-up"></i>
+    </button>
+
+    <!-- Lightbox -->
+    <div class="lightbox" id="lightbox">
+        <button class="lightbox-close" aria-label="Close">
+            <i class="fas fa-times"></i>
+        </button>
+        <button class="lightbox-nav lightbox-prev" aria-label="Previous">
+            <i class="fas fa-chevron-left"></i>
+        </button>
+        <button class="lightbox-nav lightbox-next" aria-label="Next">
+            <i class="fas fa-chevron-right"></i>
+        </button>
+        <img src="" alt="" class="lightbox-image" id="lightboxImage">
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/main.js"></script>
+</body>
+</html>
