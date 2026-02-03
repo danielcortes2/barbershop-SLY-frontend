@@ -102,7 +102,7 @@ function initBookingForm() {
     
     if (!form) return;
 
-    form.addEventListener('submit', function(e) {
+    form.addEventListener('submit', async function(e) {
         e.preventDefault();
 
         // Obtener datos del formulario
@@ -117,22 +117,53 @@ function initBookingForm() {
         // Show loading state
         const submitBtn = form.querySelector('button[type="submit"]');
         const originalText = submitBtn.innerHTML;
-        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Creating booking...';
         submitBtn.disabled = true;
 
-        // Simular envío (en producción, aquí iría la llamada a la API)
-        setTimeout(() => {
+        try {
+            // Preparar datos para la API
+            const serviceName = document.querySelector(`#bookingService option[value="${data.service}"]`).textContent;
+            
+            const bookingData = {
+                nombre_cliente: data.name,
+                email: data.email || `${data.phone.replace(/[^0-9]/g, '')}@phone.local`,
+                fecha: data.date,
+                hora: data.time,
+                servicio: serviceName
+            };
+            
+            // Enviar a la API
+            const response = await fetch(`${API_URL}/reservas/`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(bookingData)
+            });
+            
+            if (!response.ok) {
+                const error = await response.json();
+                throw new Error(error.detail || 'Error creating booking');
+            }
+            
+            const result = await response.json();
+            
             // Crear mensaje de WhatsApp
             const whatsappMessage = createWhatsAppMessage(data);
             
             // Mostrar modal de confirmación
-            showConfirmationModal(data, whatsappMessage);
+            showConfirmationModal(data, whatsappMessage, result.id);
 
             // Resetear formulario
             form.reset();
+            
+        } catch (error) {
+            console.error('Error:', error);
+            alert(error.message || 'Error creating booking. Please try again or contact us directly.');
+        } finally {
             submitBtn.innerHTML = originalText;
             submitBtn.disabled = false;
-        }, 1500);
+        }
     });
 }
 
@@ -193,7 +224,7 @@ function formatDate(dateString) {
     return date.toLocaleDateString('en-US', options);
 }
 
-function showConfirmationModal(data, whatsappMessage) {
+function showConfirmationModal(data, whatsappMessage, bookingId) {
     // Create modal
     const modal = document.createElement('div');
     modal.className = 'confirmation-modal';
@@ -202,12 +233,13 @@ function showConfirmationModal(data, whatsappMessage) {
             <div class="confirmation-icon">
                 <i class="fas fa-check-circle"></i>
             </div>
-            <h3>Booking Received!</h3>
-            <p>Thank you <strong>${data.name}</strong>, we have received your appointment request for <strong>${formatDate(data.date)}</strong> at <strong>${data.time}</strong>.</p>
-            <p class="confirmation-note">We will confirm your appointment via WhatsApp or phone shortly.</p>
+            <h3>Booking Confirmed!</h3>
+            <div class="booking-id">Booking #${bookingId}</div>
+            <p>Thank you <strong>${data.name}</strong>, your appointment has been confirmed for <strong>${formatDate(data.date)}</strong> at <strong>${data.time}</strong>.</p>
+            <p class="confirmation-note">We'll send you a confirmation shortly. Thank you for choosing SLY Salon!</p>
             <div class="confirmation-buttons">
                 <a href="https://wa.me/?text=${whatsappMessage}" class="btn btn-primary" target="_blank" rel="noopener">
-                    <i class="fab fa-whatsapp"></i> Confirm via WhatsApp
+                    <i class="fab fa-whatsapp"></i> Share via WhatsApp
                 </a>
                 <button class="btn btn-outline-dark close-modal">Close</button>
             </div>
@@ -254,6 +286,16 @@ function showConfirmationModal(data, whatsappMessage) {
         .confirmation-content h3 {
             font-size: 1.5rem;
             color: #1a1a1a;
+            margin-bottom: 1rem;
+        }
+        .booking-id {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background: var(--color-primary);
+            color: white;
+            border-radius: 2rem;
+            font-weight: 600;
+            font-size: 0.875rem;
             margin-bottom: 1rem;
         }
         .confirmation-content p {
@@ -597,3 +639,8 @@ function debounce(func, wait) {
 
     window.addEventListener('scroll', throttle(updateActiveLink, 100));
 })();
+
+/**
+ * API URL para el formulario de reservas
+ */
+const API_URL = 'http://localhost:8000/api';

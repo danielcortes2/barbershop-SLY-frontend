@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "description": "SLY Barbershop - Sitio web profesional para barbería",
   "scripts": {
-    "dev": "npx live-server --port=3000 --open=/index.html",
-    "start": "npx http-server -p 3000 -o"
+    "dev": "npx serve --no-clipboard -p 3000",
+    "start": "npx serve -p 3000"
   },
   "keywords": [
     "barbershop",
@@ -12,5 +12,8 @@
     "peluquería"
   ],
   "author": "SLY Barbershop",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "serve": "^14.2.5"
+  }
 }
