@@ -3,11 +3,11 @@
  * Panel de administración privado para gestionar citas
  */
 
-const API_URL = 'http://localhost:8000/api';
-const ADMIN_PASSWORD = 'sly2026'; // Cambiar en producción
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001/api/v1';
 let currentPage = 1;
 let currentFilters = {};
 let isAuthenticated = false;
+let adminToken = null;
 
 // Inicializar al cargar la página
 document.addEventListener('DOMContentLoaded', function() {
@@ -20,8 +20,9 @@ document.addEventListener('DOMContentLoaded', function() {
  * AUTENTICACIÓN
  */
 function checkAuthentication() {
-    const auth = sessionStorage.getItem('sly_admin_auth');
-    if (auth === 'true') {
+    const token = sessionStorage.getItem('sly_admin_token');
+    if (token) {
+        adminToken = token;
         isAuthenticated = true;
         showAdminPanel();
     } else {
@@ -33,17 +34,33 @@ function initLoginForm() {
     const loginForm = document.getElementById('loginForm');
     const loginError = document.getElementById('loginError');
     
-    loginForm.addEventListener('submit', function(e) {
+    loginForm.addEventListener('submit', async function(e) {
         e.preventDefault();
         
         const password = document.getElementById('adminPassword').value;
         
-        if (password === ADMIN_PASSWORD) {
-            sessionStorage.setItem('sly_admin_auth', 'true');
+        try {
+            const response = await fetch(`${API_URL}/auth/login`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ password })
+            });
+            
+            if (!response.ok) {
+                throw new Error('Contraseña incorrecta');
+            }
+            
+            const data = await response.json();
+            adminToken = data.token;
+            sessionStorage.setItem('sly_admin_token', adminToken);
             isAuthenticated = true;
             loginError.style.display = 'none';
             showAdminPanel();
-        } else {
+            
+        } catch (error) {
+            loginError.textContent = 'Contraseña incorrecta. Intenta de nuevo.';
             loginError.style.display = 'block';
             document.getElementById('adminPassword').value = '';
             document.getElementById('adminPassword').focus();
@@ -121,7 +138,13 @@ function initAdminPanel() {
 }
 
 function logout() {
-    sessionStorage.removeItem('sly_admin_auth');
+    if (adminToken) {
+        fetch(`${API_URL}/auth/logout?token=${adminToken}`, {
+            method: 'POST'
+        }).catch(e => console.log('Error en logout:', e));
+    }
+    sessionStorage.removeItem('sly_admin_token');
+    adminToken = null;
     isAuthenticated = false;
     showLoginScreen();
 }
