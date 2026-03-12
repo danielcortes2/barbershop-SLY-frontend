@@ -534,24 +534,15 @@
 
                         <div class="form-group">
                             <label for="bookingService">Service *</label>
-                            <select id="bookingService" name="service" required>
-                                <option value="">Select a service</option>
-                                <option value="classic-cut">Classic Cut - €25</option>
-                                <option value="fade-cut">Fade Cut - €30</option>
-                                <option value="shave">Classic Shave - €20</option>
-                                <option value="beard-trim">Beard Trim - €15</option>
-                                <option value="cut-beard">Cut + Beard - €40</option>
-                                <option value="treatment">Hair Treatment - €35</option>
+                            <select id="bookingService" name="service_id" required>
+                                <option value="">Loading services...</option>
                             </select>
                         </div>
 
                         <div class="form-group">
-                            <label for="bookingBarber">Preferred barber</label>
-                            <select id="bookingBarber" name="barber">
-                                <option value="">No preference</option>
-                                <option value="suleiman">Suleiman</option>
-                                <option value="michael">Michael</option>
-                                <option value="david">David</option>
+                            <label for="bookingBarber">Barber *</label>
+                            <select id="bookingBarber" name="barber_id" required>
+                                <option value="">Loading barbers...</option>
                             </select>
                         </div>
 
@@ -562,25 +553,8 @@
                             </div>
                             <div class="form-group">
                                 <label for="bookingTime">Time *</label>
-                                <select id="bookingTime" name="time" required>
-                                    <option value="">Select time</option>
-                                    <option value="09:00">09:00</option>
-                                    <option value="09:30">09:30</option>
-                                    <option value="10:00">10:00</option>
-                                    <option value="10:30">10:30</option>
-                                    <option value="11:00">11:00</option>
-                                    <option value="11:30">11:30</option>
-                                    <option value="12:00">12:00</option>
-                                    <option value="12:30">12:30</option>
-                                    <option value="13:00">13:00</option>
-                                    <option value="16:00">16:00</option>
-                                    <option value="16:30">16:30</option>
-                                    <option value="17:00">17:00</option>
-                                    <option value="17:30">17:30</option>
-                                    <option value="18:00">18:00</option>
-                                    <option value="18:30">18:30</option>
-                                    <option value="19:00">19:00</option>
-                                    <option value="19:30">19:30</option>
+                                <select id="bookingTime" name="time" required disabled>
+                                    <option value="">Select barber and date first</option>
                                 </select>
                             </div>
                         </div>
@@ -590,7 +564,9 @@
                             <textarea id="bookingNotes" name="notes" rows="3" placeholder="Anything we should know?"></textarea>
                         </div>
 
-                        <button type="submit" class="btn btn-primary btn-block">
+                        <div id="bookingFeedback" style="display:none;margin-bottom:1rem;padding:1rem;border-radius:8px;"></div>
+
+                        <button type="submit" class="btn btn-primary btn-block" id="bookingSubmitBtn">
                             <i class="fas fa-calendar-check"></i>
                             Confirm Booking
                         </button>
@@ -774,6 +750,7 @@
     </div>
 
     <!-- Scripts -->
+    <script src="js/config.js"></script>
     <script src="js/main.js"></script>
 </body>
 </html>

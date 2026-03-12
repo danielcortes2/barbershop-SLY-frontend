@@ -99,13 +99,153 @@ function initSmoothScroll() {
  */
 function initBookingForm() {
     const form = document.getElementById('bookingForm');
-    
     if (!form) return;
 
-    form.addEventListener('submit', function(e) {
+    const serviceSelect = document.getElementById('bookingService');
+    const barberSelect  = document.getElementById('bookingBarber');
+    const dateInput     = document.getElementById('bookingDate');
+    const timeSelect    = document.getElementById('bookingTime');
+    const submitBtn     = document.getElementById('bookingSubmitBtn');
+    const feedback      = document.getElementById('bookingFeedback');
+
+    // Fecha mínima = hoy
+    dateInput.min = new Date().toISOString().split('T')[0];
+
+    // Cargar servicios y barberos desde la API
+    async function loadFormData() {
+        try {
+            const [resServices, resBarbers] = await Promise.all([
+                fetch(`${API_URL}/services/`),
+                fetch(`${API_URL}/barbers/`)
+            ]);
+            const services = await resServices.json();
+            const barbers  = await resBarbers.json();
+
+            serviceSelect.innerHTML = '<option value="">Select a service</option>';
+            services.forEach(s => {
+                const opt = document.createElement('option');
+                opt.value = s.id;
+                opt.textContent = `${s.name} - €${parseFloat(s.price).toFixed(0)} (${s.duration} min)`;
+                serviceSelect.appendChild(opt);
+            });
+
+            barberSelect.innerHTML = '<option value="">Select a barber</option>';
+            barbers.forEach(b => {
+                const opt = document.createElement('option');
+                opt.value = b.id;
+                opt.textContent = b.name;
+                barberSelect.appendChild(opt);
+            });
+        } catch (err) {
+            serviceSelect.innerHTML = '<option value="">Error loading services</option>';
+            barberSelect.innerHTML  = '<option value="">Error loading barbers</option>';
+        }
+    }
+
+    // Cargar horarios disponibles
+    async function loadSlots() {
+        const barberId = barberSelect.value;
+        const date     = dateInput.value;
+
+        if (!barberId || !date) {
+            timeSelect.innerHTML  = '<option value="">Select barber and date first</option>';
+            timeSelect.disabled   = true;
+            return;
+        }
+
+        timeSelect.innerHTML = '<option value="">Loading...</option>';
+        timeSelect.disabled  = true;
+
+        try {
+            const res = await fetch(`${API_URL}/appointments/available-slots?barberId=${barberId}&appointmentDate=${date}`);
+            const data = await res.json();
+            const slots = data.availableSlots || [];
+
+            if (slots.length === 0) {
+                timeSelect.innerHTML = '<option value="">No slots available</option>';
+                return;
+            }
+
+            timeSelect.innerHTML = '<option value="">Select time</option>';
+            slots.forEach(s => {
+                const opt = document.createElement('option');
+                opt.value = s;
+                opt.textContent = s;
+                timeSelect.appendChild(opt);
+            });
+            timeSelect.disabled = false;
+        } catch (err) {
+            timeSelect.innerHTML = '<option value="">Error loading slots</option>';
+        }
+    }
+
+    barberSelect.addEventListener('change', loadSlots);
+    dateInput.addEventListener('change', loadSlots);
+
+    function showFeedback(msg, success) {
+        feedback.textContent = msg;
+        feedback.style.display = 'block';
+        feedback.style.background = success ? '#d4edda' : '#f8d7da';
+        feedback.style.color = success ? '#155724' : '#721c24';
+        feedback.style.border = `1px solid ${success ? '#c3e6cb' : '#f5c6cb'}`;
+    }
+
+    form.addEventListener('submit', async function(e) {
         e.preventDefault();
-        window.location.href = 'reserva.html';
+
+        const name     = document.getElementById('bookingName').value.trim();
+        const phone    = document.getElementById('bookingPhone').value.trim();
+        const barberId = parseInt(barberSelect.value);
+        const serviceId = parseInt(serviceSelect.value);
+        const date     = dateInput.value;
+        const time     = timeSelect.value;
+        const notes    = document.getElementById('bookingNotes').value.trim();
+
+        if (!name || !phone || !barberId || !serviceId || !date || !time) {
+            showFeedback('Please fill in all required fields.', false);
+            return;
+        }
+
+        const appointmentDatetime = `${date}T${time}:00`;
+
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Booking...';
+        feedback.style.display = 'none';
+
+        try {
+            const response = await fetch(`${API_URL}/appointments/`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    client_name: name,
+                    client_phone: phone,
+                    barber_id: barberId,
+                    service_id: serviceId,
+                    appointment_date: appointmentDatetime,
+                    notes: notes || null
+                })
+            });
+
+            const result = await response.json();
+
+            if (response.ok) {
+                showFeedback(`Booking confirmed! Your appointment ID is #${result.id}. We will contact you to confirm.`, true);
+                form.reset();
+                timeSelect.innerHTML = '<option value="">Select barber and date first</option>';
+                timeSelect.disabled = true;
+                dateInput.min = new Date().toISOString().split('T')[0];
+            } else {
+                showFeedback(result.detail || 'Error creating booking. Please try again.', false);
+            }
+        } catch (err) {
+            showFeedback('Connection error. Please try again or contact us directly.', false);
+        } finally {
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = '<i class="fas fa-calendar-check"></i> Confirm Booking';
+        }
     });
+
+    loadFormData();
 }
 
 function validateForm(data) {
