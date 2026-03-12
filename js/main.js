@@ -102,68 +102,20 @@ function initBookingForm() {
     
     if (!form) return;
 
-    form.addEventListener('submit', async function(e) {
+    form.addEventListener('submit', function(e) {
         e.preventDefault();
 
-        // Obtener datos del formulario
         const formData = new FormData(form);
         const data = Object.fromEntries(formData.entries());
 
-        // Validar campos requeridos
-        if (!validateForm(data)) {
-            return;
-        }
+        // Redirigir a la página de reserva completa pasando los datos básicos
+        const params = new URLSearchParams();
+        if (data.name)  params.set('name', data.name);
+        if (data.phone) params.set('phone', data.phone);
+        if (data.date)  params.set('date', data.date);
+        if (data.time)  params.set('time', data.time);
 
-        // Show loading state
-        const submitBtn = form.querySelector('button[type="submit"]');
-        const originalText = submitBtn.innerHTML;
-        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Creating booking...';
-        submitBtn.disabled = true;
-
-        try {
-            // Preparar datos para la API
-            const serviceName = document.querySelector(`#bookingService option[value="${data.service}"]`).textContent;
-            
-            const bookingData = {
-                nombre_cliente: data.name,
-                email: data.email || `${data.phone.replace(/[^0-9]/g, '')}@phone.local`,
-                fecha: data.date,
-                hora: data.time,
-                servicio: serviceName
-            };
-            
-            // Enviar a la API
-            const response = await fetch(`${API_URL}/reservas/`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(bookingData)
-            });
-            
-            if (!response.ok) {
-                const error = await response.json();
-                throw new Error(error.detail || 'Error creating booking');
-            }
-            
-            const result = await response.json();
-            
-            // Crear mensaje de WhatsApp
-            const whatsappMessage = createWhatsAppMessage(data);
-            
-            // Mostrar modal de confirmación
-            showConfirmationModal(data, whatsappMessage, result.id);
-
-            // Resetear formulario
-            form.reset();
-            
-        } catch (error) {
-            console.error('Error:', error);
-            alert(error.message || 'Error creating booking. Please try again or contact us directly.');
-        } finally {
-            submitBtn.innerHTML = originalText;
-            submitBtn.disabled = false;
-        }
+        window.location.href = `reserva.html?${params.toString()}`;
     });
 }
 
@@ -643,4 +595,4 @@ function debounce(func, wait) {
 /**
  * API URL para el formulario de reservas
  */
-const API_URL = 'http://localhost:8000/api';
+const API_URL = (typeof CONFIG !== 'undefined' && CONFIG.API_BASE_URL) || 'http://localhost:9000/api/v1';

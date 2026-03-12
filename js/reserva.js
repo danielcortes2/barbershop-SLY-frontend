@@ -176,21 +176,29 @@ async function loadAvailableSlots() {
 async function submitForm(event) {
   event.preventDefault();
   
-  // Obtener datos del formulario
   const formData = new FormData(document.getElementById('appointmentForm'));
   
+  const formDate = formData.get('appointmentDate');
+  const formTime = formData.get('appointmentTime');
+
+  if (!formDate || !formTime) {
+    showMessage('Por favor selecciona fecha y hora', 'error');
+    return;
+  }
+
+  // Combinar fecha y hora en datetime ISO que espera el backend
+  const appointmentDatetime = `${formDate}T${formTime}:00`;
+
   const appointmentData = {
-    clientName: formData.get('clientName'),
-    clientPhone: formData.get('clientPhone'),
-    barberId: parseInt(formData.get('barberId')),
-    serviceId: parseInt(formData.get('serviceId')),
-    appointmentDate: formData.get('appointmentDate'),
-    appointmentTime: formData.get('appointmentTime')
+    client_name: formData.get('clientName'),
+    client_phone: formData.get('clientPhone'),
+    barber_id: parseInt(formData.get('barberId')),
+    service_id: parseInt(formData.get('serviceId')),
+    appointment_date: appointmentDatetime,
   };
-  
+
   try {
-    // Enviar datos al servidor
-    const response = await fetch(`${API_URL}/appointments`, {
+    const response = await fetch(`${API_URL}/appointments/`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -201,22 +209,18 @@ async function submitForm(event) {
     const data = await response.json();
     
     if (response.ok) {
-      // Mostrar mensaje de éxito
-      showMessage(`✓ ¡Reserva creada exitosamente! ID: ${data.appointmentId}`, 'success');
-      
-      // Limpiar formulario
+      showMessage(`Reserva creada con exito. ID: ${data.id}`, 'success');
       document.getElementById('appointmentForm').reset();
-      
-      // Recargar servicios y barberos
+      document.getElementById('appointmentTime').disabled = true;
+      document.getElementById('appointmentTime').innerHTML = '<option value="">Primero selecciona fecha y barbero</option>';
       await loadServices();
       await loadBarbers();
     } else {
-      // Mostrar mensaje de error
-      showMessage(data.error || 'Error al crear la reserva', 'error');
+      showMessage(data.detail || 'Error al crear la reserva', 'error');
     }
   } catch (error) {
     console.error('Error:', error);
-    showMessage('Error de conexión con el servidor', 'error');
+    showMessage('Error de conexion con el servidor', 'error');
   }
 }
 
@@ -248,4 +252,15 @@ function showMessage(message, type = 'info') {
 // =====================================================
 // INICIALIZACIÓN: Ejecutar cuando el DOM esté listo
 // =====================================================
-document.addEventListener('DOMContentLoaded', initForm);
+document.addEventListener('DOMContentLoaded', async () => {
+  await initForm();
+
+  // Pre-rellenar campos si vienen por query params (desde index.html)
+  const params = new URLSearchParams(window.location.search);
+  if (params.get('name'))  document.getElementById('clientName').value = params.get('name');
+  if (params.get('phone')) document.getElementById('clientPhone').value = params.get('phone');
+  if (params.get('date'))  {
+    document.getElementById('appointmentDate').value = params.get('date');
+    await loadAvailableSlots();
+  }
+});
