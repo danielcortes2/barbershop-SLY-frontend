@@ -5,7 +5,7 @@
 // =====================================================
 
 // URL del servidor API
-const API_URL = 'http://localhost:3000/api';
+const API_URL = (typeof CONFIG !== 'undefined' && CONFIG.API_BASE_URL) || 'http://localhost:3001/api/v1';
 
 // Variable para almacenar el horario disponible
 let availableSlots = [];

@@ -1,15 +1,15 @@
 /**
  * SLY BARBERSHOP - ADMIN PANEL
- * Panel de administración privado para gestionar citas
+ * Panel de administracion privado para gestionar citas
  */
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001/api/v1';
+const API_URL = (typeof CONFIG !== 'undefined' && CONFIG.API_BASE_URL) || 'http://localhost:9000/api/v1';
 let currentPage = 1;
 let currentFilters = {};
 let isAuthenticated = false;
 let adminToken = null;
 
-// Inicializar al cargar la página
+// Inicializar al cargar la pagina
 document.addEventListener('DOMContentLoaded', function() {
     checkAuthentication();
     initLoginForm();
@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 /**
- * AUTENTICACIÓN
+ * AUTENTICACION
  */
 function checkAuthentication() {
     const token = sessionStorage.getItem('sly_admin_token');
@@ -33,34 +33,25 @@ function checkAuthentication() {
 function initLoginForm() {
     const loginForm = document.getElementById('loginForm');
     const loginError = document.getElementById('loginError');
-    
+
     loginForm.addEventListener('submit', async function(e) {
         e.preventDefault();
-        
         const password = document.getElementById('adminPassword').value;
-        
         try {
             const response = await fetch(`${API_URL}/auth/login`, {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ password })
             });
-            
-            if (!response.ok) {
-                throw new Error('Contraseña incorrecta');
-            }
-            
+            if (!response.ok) throw new Error('Contrasena incorrecta');
             const data = await response.json();
             adminToken = data.token;
             sessionStorage.setItem('sly_admin_token', adminToken);
             isAuthenticated = true;
             loginError.style.display = 'none';
             showAdminPanel();
-            
         } catch (error) {
-            loginError.textContent = 'Contraseña incorrecta. Intenta de nuevo.';
+            loginError.textContent = 'Contrasena incorrecta. Intenta de nuevo.';
             loginError.style.display = 'block';
             document.getElementById('adminPassword').value = '';
             document.getElementById('adminPassword').focus();
@@ -90,18 +81,16 @@ function initAdminPanel() {
     const refreshBtn = document.getElementById('refreshBtn');
     const prevPageBtn = document.getElementById('prevPage');
     const nextPageBtn = document.getElementById('nextPage');
-    
-    if (logoutBtn) {
-        logoutBtn.addEventListener('click', logout);
-    }
-    
+
+    if (logoutBtn) logoutBtn.addEventListener('click', logout);
+
     if (applyFiltersBtn) {
         applyFiltersBtn.addEventListener('click', () => {
             currentPage = 1;
             applyFilters();
         });
     }
-    
+
     if (clearFiltersBtn) {
         clearFiltersBtn.addEventListener('click', () => {
             document.getElementById('filterDate').value = '';
@@ -112,23 +101,20 @@ function initAdminPanel() {
             loadStats();
         });
     }
-    
+
     if (refreshBtn) {
         refreshBtn.addEventListener('click', () => {
             loadAppointments();
             loadStats();
         });
     }
-    
+
     if (prevPageBtn) {
         prevPageBtn.addEventListener('click', () => {
-            if (currentPage > 1) {
-                currentPage--;
-                loadAppointments();
-            }
+            if (currentPage > 1) { currentPage--; loadAppointments(); }
         });
     }
-    
+
     if (nextPageBtn) {
         nextPageBtn.addEventListener('click', () => {
             currentPage++;
@@ -139,9 +125,8 @@ function initAdminPanel() {
 
 function logout() {
     if (adminToken) {
-        fetch(`${API_URL}/auth/logout?token=${adminToken}`, {
-            method: 'POST'
-        }).catch(e => console.log('Error en logout:', e));
+        fetch(`${API_URL}/auth/logout?token=${adminToken}`, { method: 'POST' })
+            .catch(e => console.log('Error en logout:', e));
     }
     sessionStorage.removeItem('sly_admin_token');
     adminToken = null;
@@ -150,26 +135,18 @@ function logout() {
 }
 
 /**
- * CARGAR ESTADÍSTICAS
+ * CARGAR ESTADISTICAS
  */
 async function loadStats() {
     try {
-        // Total appointments
-        const responseAll = await fetch(`${API_URL}/reservas/?limit=1000`);
-        const dataAll = await responseAll.json();
-        
-        // Confirmed
-        const responseConfirmed = await fetch(`${API_URL}/reservas/?estado=confirmada&limit=1000`);
-        const dataConfirmed = await responseConfirmed.json();
-        
-        // Cancelled
-        const responseCancelled = await fetch(`${API_URL}/reservas/?estado=cancelada&limit=1000`);
-        const dataCancelled = await responseCancelled.json();
-        
-        document.getElementById('statTotal').textContent = dataAll.total;
-        document.getElementById('statConfirmed').textContent = dataConfirmed.total;
-        document.getElementById('statCancelled').textContent = dataCancelled.total;
-        
+        const [all, confirmed, cancelled] = await Promise.all([
+            fetch(`${API_URL}/appointments/?limit=1000`).then(r => r.json()),
+            fetch(`${API_URL}/appointments/?limit=1000&status_filter=confirmed`).then(r => r.json()),
+            fetch(`${API_URL}/appointments/?limit=1000&status_filter=cancelled`).then(r => r.json()),
+        ]);
+        document.getElementById('statTotal').textContent = all.length;
+        document.getElementById('statConfirmed').textContent = confirmed.length;
+        document.getElementById('statCancelled').textContent = cancelled.length;
     } catch (error) {
         console.error('Error loading stats:', error);
     }
@@ -180,48 +157,38 @@ async function loadStats() {
  */
 async function loadAppointments() {
     const listContainer = document.getElementById('appointmentsList');
-    
     if (!listContainer) return;
-    
+
     listContainer.innerHTML = `
         <div class="loading-spinner">
             <i class="fas fa-spinner fa-spin"></i>
-            <p>Loading appointments...</p>
+            <p>Cargando citas...</p>
         </div>
     `;
-    
+
     try {
-        let url = `${API_URL}/reservas/?skip=${(currentPage - 1) * 20}&limit=20`;
-        
-        if (currentFilters.fecha) {
-            url += `&fecha=${currentFilters.fecha}`;
+        let url = `${API_URL}/appointments/?skip=${(currentPage - 1) * 20}&limit=20`;
+
+        if (currentFilters.status) {
+            url += `&status_filter=${currentFilters.status}`;
         }
-        
-        if (currentFilters.estado) {
-            url += `&estado=${currentFilters.estado}`;
-        }
-        
+
         const response = await fetch(url);
-        
-        if (!response.ok) {
-            throw new Error('Error loading appointments');
-        }
-        
-        const data = await response.json();
-        
-        displayAppointments(data.reservas);
-        updatePagination(data.total);
-        
+        if (!response.ok) throw new Error('Error loading appointments');
+
+        const appointments = await response.json();
+        displayAppointments(appointments);
+        updatePagination(appointments.length);
+
     } catch (error) {
         console.error('Error:', error);
         listContainer.innerHTML = `
             <div class="error-message">
                 <i class="fas fa-exclamation-triangle"></i>
-                <h3>Error loading appointments</h3>
-                <p>Please make sure the backend server is running.</p>
+                <h3>Error cargando citas</h3>
+                <p>Asegurate de que el servidor esta corriendo.</p>
                 <button class="btn btn-primary" onclick="loadAppointments()">
-                    <i class="fas fa-redo"></i>
-                    Try Again
+                    <i class="fas fa-redo"></i> Reintentar
                 </button>
             </div>
         `;
@@ -229,310 +196,157 @@ async function loadAppointments() {
 }
 
 function applyFilters() {
-    const dateFilter = document.getElementById('filterDate').value;
     const statusFilter = document.getElementById('filterStatus').value;
-    
     currentFilters = {};
-    
-    if (dateFilter) {
-        currentFilters.fecha = dateFilter;
-    }
-    
-    if (statusFilter) {
-        currentFilters.estado = statusFilter;
-    }
-    
+    if (statusFilter) currentFilters.status = statusFilter;
     loadAppointments();
+}
+
+function statusLabel(status) {
+    const labels = {
+        pending: 'Pendiente',
+        confirmed: 'Confirmada',
+        completed: 'Completada',
+        cancelled: 'Cancelada'
+    };
+    return labels[status] || status;
 }
 
 function displayAppointments(appointments) {
     const listContainer = document.getElementById('appointmentsList');
-    
-    if (appointments.length === 0) {
+
+    if (!appointments || appointments.length === 0) {
         listContainer.innerHTML = `
             <div class="empty-state">
                 <i class="fas fa-calendar-times"></i>
-                <h3>No appointments found</h3>
-                <p>There are no appointments matching your criteria.</p>
+                <h3>No hay citas</h3>
+                <p>No se encontraron citas con los filtros aplicados.</p>
             </div>
         `;
         return;
     }
-    
-    listContainer.innerHTML = appointments.map(apt => `
-        <div class="appointment-card ${apt.estado === 'cancelada' ? 'cancelled' : ''}">
+
+    listContainer.innerHTML = appointments.map(apt => {
+        const isCancelled = apt.status === 'cancelled';
+        const dateStr = apt.appointment_date
+            ? new Date(apt.appointment_date).toLocaleString('es-ES', {
+                weekday: 'short', year: 'numeric', month: 'short',
+                day: 'numeric', hour: '2-digit', minute: '2-digit'
+              })
+            : '-';
+        const barberName = apt.barber ? apt.barber.name : `Barbero #${apt.barber_id}`;
+        const serviceName = apt.service ? apt.service.name : `Servicio #${apt.service_id}`;
+
+        return `
+        <div class="appointment-card ${isCancelled ? 'cancelled' : ''}">
             <div class="appointment-header">
                 <div class="appointment-id">#${apt.id}</div>
-                <span class="appointment-status status-${apt.estado}">
-                    <i class="fas fa-${apt.estado === 'confirmada' ? 'check-circle' : 'times-circle'}"></i>
-                    ${apt.estado === 'confirmada' ? 'Confirmed' : 'Cancelled'}
+                <span class="appointment-status status-${apt.status}">
+                    ${statusLabel(apt.status)}
                 </span>
             </div>
-            
             <div class="appointment-body">
                 <div class="appointment-info">
                     <div class="info-row">
                         <i class="fas fa-user"></i>
                         <div>
-                            <strong>${apt.nombre_cliente}</strong>
-                            <span>${apt.email}</span>
+                            <strong>${apt.client_name}</strong>
+                            ${apt.client_phone ? `<span>${apt.client_phone}</span>` : ''}
                         </div>
                     </div>
-                    
                     <div class="info-row">
                         <i class="fas fa-calendar-alt"></i>
-                        <div>
-                            <strong>${formatDisplayDate(apt.fecha)}</strong>
-                            <span>${apt.hora}</span>
-                        </div>
+                        <strong>${dateStr}</strong>
                     </div>
-                    
                     <div class="info-row">
-                        <i class="fas fa-scissors"></i>
+                        <i class="fas fa-cut"></i>
                         <div>
-                            <strong>${apt.servicio}</strong>
+                            <strong>${serviceName}</strong>
+                            <span>${barberName}</span>
                         </div>
                     </div>
-                    
+                    ${apt.notes ? `<div class="info-row"><i class="fas fa-sticky-note"></i><span>${apt.notes}</span></div>` : ''}
                     <div class="info-row info-meta">
                         <i class="fas fa-clock"></i>
-                        <span>Created: ${formatDateTime(apt.created_at)}</span>
+                        <span>Creada: ${formatDateTime(apt.created_at)}</span>
                     </div>
                 </div>
-                
-                ${apt.estado === 'confirmada' ? `
-                    <div class="appointment-actions">
-                        <button class="btn btn-sm btn-outline" onclick="editAppointment(${apt.id})">
-                            <i class="fas fa-edit"></i>
-                            Edit
-                        </button>
+                <div class="appointment-actions">
+                    ${!isCancelled ? `
                         <button class="btn btn-sm btn-danger" onclick="cancelAppointment(${apt.id})">
-                            <i class="fas fa-times"></i>
-                            Cancel
+                            <i class="fas fa-times"></i> Cancelar
                         </button>
-                        <button class="btn btn-sm btn-outline" onclick="deleteAppointment(${apt.id})">
-                            <i class="fas fa-trash"></i>
-                            Delete
-                        </button>
-                    </div>
-                ` : `
-                    <div class="appointment-actions">
-                        <button class="btn btn-sm btn-outline" onclick="deleteAppointment(${apt.id})">
-                            <i class="fas fa-trash"></i>
-                            Delete
-                        </button>
-                    </div>
-                `}
+                    ` : ''}
+                    <button class="btn btn-sm btn-outline" onclick="deleteAppointment(${apt.id})">
+                        <i class="fas fa-trash"></i> Eliminar
+                    </button>
+                </div>
             </div>
         </div>
-    `).join('');
-}
-
-function formatDisplayDate(dateString) {
-    const date = new Date(dateString + 'T00:00:00');
-    const options = { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' };
-    return date.toLocaleDateString('en-US', options);
+        `;
+    }).join('');
 }
 
 function formatDateTime(dateTimeString) {
-    const date = new Date(dateTimeString);
-    return date.toLocaleString('en-US', {
-        month: 'short',
-        day: 'numeric',
-        year: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit'
+    if (!dateTimeString) return '-';
+    return new Date(dateTimeString).toLocaleString('es-ES', {
+        month: 'short', day: 'numeric', year: 'numeric',
+        hour: '2-digit', minute: '2-digit'
     });
 }
 
-function updatePagination(total) {
+function updatePagination(count) {
     const paginationContainer = document.getElementById('appointmentsPagination');
     const paginationInfo = document.getElementById('paginationInfo');
     const prevBtn = document.getElementById('prevPage');
     const nextBtn = document.getElementById('nextPage');
-    
-    const totalPages = Math.ceil(total / 20);
-    
-    if (totalPages <= 1) {
+
+    if (!paginationContainer) return;
+
+    const hasMore = count === 20;
+    const hasPrev = currentPage > 1;
+
+    if (!hasMore && !hasPrev) {
         paginationContainer.style.display = 'none';
         return;
     }
-    
+
     paginationContainer.style.display = 'flex';
-    paginationInfo.textContent = `Page ${currentPage} of ${totalPages} (${total} total)`;
-    
-    prevBtn.disabled = currentPage === 1;
-    nextBtn.disabled = currentPage === totalPages;
+    if (paginationInfo) paginationInfo.textContent = `Pagina ${currentPage}`;
+    if (prevBtn) prevBtn.disabled = !hasPrev;
+    if (nextBtn) nextBtn.disabled = !hasMore;
 }
 
 /**
  * ACCIONES DE CITAS
  */
 async function cancelAppointment(id) {
-    if (!confirm('Are you sure you want to cancel this appointment?')) {
-        return;
-    }
-    
+    if (!confirm('Cancelar esta cita?')) return;
     try {
-        const response = await fetch(`${API_URL}/reservas/${id}/cancelar`, {
-            method: 'PATCH'
+        const response = await fetch(`${API_URL}/appointments/${id}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ status: 'cancelled' })
         });
-        
-        if (!response.ok) {
-            throw new Error('Error cancelling appointment');
-        }
-        
-        alert('Appointment cancelled successfully');
+        if (!response.ok) throw new Error('Error al cancelar');
         loadAppointments();
         loadStats();
-        
     } catch (error) {
         console.error('Error:', error);
-        alert('Error cancelling appointment. Please try again.');
+        alert('Error al cancelar la cita.');
     }
 }
 
 async function deleteAppointment(id) {
-    if (!confirm('Are you sure you want to PERMANENTLY delete this appointment? This action cannot be undone.')) {
-        return;
-    }
-    
+    if (!confirm('Eliminar esta cita permanentemente?')) return;
     try {
-        const response = await fetch(`${API_URL}/reservas/${id}`, {
-            method: 'DELETE'
-        });
-        
-        if (!response.ok) {
-            throw new Error('Error deleting appointment');
-        }
-        
-        alert('Appointment deleted successfully');
+        const response = await fetch(`${API_URL}/appointments/${id}`, { method: 'DELETE' });
+        if (!response.ok) throw new Error('Error al eliminar');
         loadAppointments();
         loadStats();
-        
     } catch (error) {
         console.error('Error:', error);
-        alert('Error deleting appointment. Please try again.');
+        alert('Error al eliminar la cita.');
     }
 }
-
-async function editAppointment(id) {
-    try {
-        const response = await fetch(`${API_URL}/reservas/${id}`);
-        
-        if (!response.ok) {
-            throw new Error('Error loading appointment');
-        }
-        
-        const appointment = await response.json();
-        showEditModal(appointment);
-        
-    } catch (error) {
-        console.error('Error:', error);
-        alert('Error loading appointment data');
-    }
-}
-
-function showEditModal(appointment) {
-    const modal = document.createElement('div');
-    modal.className = 'edit-modal-overlay';
-    modal.innerHTML = `
-        <div class="edit-modal">
-            <div class="modal-header">
-                <h3><i class="fas fa-edit"></i> Edit Appointment #${appointment.id}</h3>
-                <button class="modal-close" onclick="closeEditModal()">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-            
-            <form class="edit-form" id="editForm">
-                <input type="hidden" id="editId" value="${appointment.id}">
-                
-                <div class="form-group">
-                    <label for="editName">Full name *</label>
-                    <input type="text" id="editName" value="${appointment.nombre_cliente}" required>
-                </div>
-                
-                <div class="form-group">
-                    <label for="editEmail">Email *</label>
-                    <input type="email" id="editEmail" value="${appointment.email}" required>
-                </div>
-                
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="editDate">Date *</label>
-                        <input type="date" id="editDate" value="${appointment.fecha}" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="editTime">Time *</label>
-                        <input type="time" id="editTime" value="${appointment.hora}" required>
-                    </div>
-                </div>
-                
-                <div class="form-group">
-                    <label for="editService">Service *</label>
-                    <input type="text" id="editService" value="${appointment.servicio}" required>
-                </div>
-                
-                <div class="modal-actions">
-                    <button type="button" class="btn btn-outline" onclick="closeEditModal()">
-                        Cancel
-                    </button>
-                    <button type="submit" class="btn btn-primary">
-                        <i class="fas fa-save"></i>
-                        Save Changes
-                    </button>
-                </div>
-            </form>
-        </div>
-    `;
-    
-    document.body.appendChild(modal);
-    
-    document.getElementById('editForm').addEventListener('submit', async (e) => {
-        e.preventDefault();
-        await updateAppointment();
-    });
-}
-
-function closeEditModal() {
-    const modal = document.querySelector('.edit-modal-overlay');
-    if (modal) {
-        modal.remove();
-    }
-}
-
-async function updateAppointment() {
-    const id = document.getElementById('editId').value;
-    const data = {
-        nombre_cliente: document.getElementById('editName').value,
-        email: document.getElementById('editEmail').value,
-        fecha: document.getElementById('editDate').value,
-        hora: document.getElementById('editTime').value,
-        servicio: document.getElementById('editService').value
-    };
-    
-    try {
-        const response = await fetch(`${API_URL}/reservas/${id}`, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(data)
-        });
-        
-        if (!response.ok) {
-            const error = await response.json();
-            throw new Error(error.detail || 'Error updating appointment');
-        }
-        
-        alert('Appointment updated successfully');
-        closeEditModal();
-        loadAppointments();
-        loadStats();
-        
-    } catch (error) {
-        console.error('Error:', error);
-        alert(error.message || 'Error updating appointment. Please try again.');
-    }
-}
+    initLoginForm();

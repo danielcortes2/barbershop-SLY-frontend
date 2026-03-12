@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "description": "SLY Barbershop - Sitio web profesional para barbería",
   "scripts": {
-    "dev": "npx serve --no-clipboard -p 3000",
-    "start": "npx serve -p 3000"
+    "dev": "npx serve --no-clipboard -p 5173",
+    "start": "npx serve -p 5173"
   },
   "keywords": [
     "barbershop",
