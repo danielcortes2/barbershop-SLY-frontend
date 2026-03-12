@@ -172,6 +172,9 @@ async function loadAppointments() {
         if (currentFilters.status) {
             url += `&status_filter=${currentFilters.status}`;
         }
+        if (currentFilters.date) {
+            url += `&date_filter=${currentFilters.date}`;
+        }
 
         const response = await fetch(url);
         if (!response.ok) throw new Error('Error loading appointments');
@@ -197,8 +200,10 @@ async function loadAppointments() {
 
 function applyFilters() {
     const statusFilter = document.getElementById('filterStatus').value;
+    const dateFilter = document.getElementById('filterDate').value;
     currentFilters = {};
     if (statusFilter) currentFilters.status = statusFilter;
+    if (dateFilter) currentFilters.date = dateFilter;
     loadAppointments();
 }
 
@@ -272,6 +277,11 @@ function displayAppointments(appointments) {
                     </div>
                 </div>
                 <div class="appointment-actions">
+                    ${apt.status === 'pending' ? `
+                        <button class="btn btn-sm btn-confirm" onclick="confirmAppointment(${apt.id})">
+                            <i class="fas fa-check"></i> Confirm
+                        </button>
+                    ` : ''}
                     ${!isCancelled ? `
                         <button class="btn btn-sm btn-danger" onclick="cancelAppointment(${apt.id})">
                             <i class="fas fa-times"></i> Cancel
@@ -320,6 +330,23 @@ function updatePagination(count) {
 /**
  * ACCIONES DE CITAS
  */
+async function confirmAppointment(id) {
+    if (!confirm('Confirmar esta cita?')) return;
+    try {
+        const response = await fetch(`${API_URL}/appointments/${id}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ status: 'confirmed' })
+        });
+        if (!response.ok) throw new Error('Error al confirmar');
+        loadAppointments();
+        loadStats();
+    } catch (error) {
+        console.error('Error:', error);
+        alert('Error al confirmar la cita.');
+    }
+}
+
 async function cancelAppointment(id) {
     if (!confirm('Cancelar esta cita?\nEl horario quedara libre.')) return;
     try {

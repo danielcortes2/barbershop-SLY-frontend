@@ -201,6 +201,19 @@ input, textarea, select {
     color: var(--color-dark);
 }
 
+/* Botón confirmar (verde suave) visible sobre fondos blancos */
+.btn-confirm {
+    background-color: #dcfce7;
+    border: 1.5px solid #86efac;
+    color: #15803d;
+}
+
+.btn-confirm:hover {
+    background-color: #86efac;
+    border-color: #22c55e;
+    color: #14532d;
+}
+
 /* Botón eliminar (rojo suave) visible sobre fondos blancos */
 .btn-delete {
     background-color: #fee2e2;
