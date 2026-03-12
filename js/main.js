@@ -142,40 +142,61 @@ function initBookingForm() {
         }
     }
 
-    // Cargar horarios disponibles
+    // Slots de 09:00 a 19:00 cada 30 minutos
+    const ALL_SLOTS = [];
+    (function() {
+        let h = 9, m = 0;
+        while (h < 19 || (h === 19 && m === 0)) {
+            ALL_SLOTS.push(`${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}`);
+            m += 30;
+            if (m >= 60) { m = 0; h++; }
+        }
+    })();
+
+    function populateAllSlots(disabledSet) {
+        disabledSet = disabledSet || new Set();
+        const prev = timeSelect.value;
+        timeSelect.innerHTML = '<option value="">Select time</option>';
+        ALL_SLOTS.forEach(s => {
+            const opt = document.createElement('option');
+            opt.value = s;
+            opt.textContent = s;
+            if (disabledSet.has(s)) {
+                opt.disabled = true;
+                opt.textContent = `${s} (unavailable)`;
+            }
+            timeSelect.appendChild(opt);
+        });
+        timeSelect.disabled = false;
+        if (prev && !disabledSet.has(prev)) timeSelect.value = prev;
+    }
+
+    // Mostrar todos los horarios al cargar
+    populateAllSlots();
+
+    // Cargar horarios disponibles (filtrar los ocupados)
     async function loadSlots() {
         const barberId = barberSelect.value;
         const date     = dateInput.value;
 
+        // Sin barbero o fecha: mostrar todos habilitados
         if (!barberId || !date) {
-            timeSelect.innerHTML  = '<option value="">Select barber and date first</option>';
-            timeSelect.disabled   = true;
+            populateAllSlots();
             return;
         }
 
-        timeSelect.innerHTML = '<option value="">Loading...</option>';
-        timeSelect.disabled  = true;
+        timeSelect.disabled = true;
+        timeSelect.innerHTML = '<option value="">Loading available times...</option>';
 
         try {
             const res = await fetch(`${API_URL}/appointments/available-slots?barberId=${barberId}&appointmentDate=${date}`);
             const data = await res.json();
-            const slots = data.availableSlots || [];
-
-            if (slots.length === 0) {
-                timeSelect.innerHTML = '<option value="">No slots available</option>';
-                return;
-            }
-
-            timeSelect.innerHTML = '<option value="">Select time</option>';
-            slots.forEach(s => {
-                const opt = document.createElement('option');
-                opt.value = s;
-                opt.textContent = s;
-                timeSelect.appendChild(opt);
-            });
-            timeSelect.disabled = false;
+            const available = new Set(data.availableSlots || []);
+            const booked = new Set(ALL_SLOTS.filter(s => !available.has(s)));
+            populateAllSlots(booked);
         } catch (err) {
-            timeSelect.innerHTML = '<option value="">Error loading slots</option>';
+            // Si falla la API, mostrar todos los slots igualmente
+            populateAllSlots();
         }
     }
 
