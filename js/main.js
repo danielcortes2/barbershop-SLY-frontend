@@ -153,50 +153,49 @@ function initBookingForm() {
         }
     })();
 
-    function populateAllSlots(disabledSet) {
-        disabledSet = disabledSet || new Set();
+    function populateSlots(availableSet) {
         const prev = timeSelect.value;
         timeSelect.innerHTML = '<option value="">Select time</option>';
+
+        if (availableSet !== null && availableSet.size === 0) {
+            timeSelect.innerHTML = '<option value="">No slots available for this day</option>';
+            timeSelect.disabled = true;
+            return;
+        }
+
         ALL_SLOTS.forEach(s => {
+            if (availableSet !== null && !availableSet.has(s)) return; // omitir ocupados
             const opt = document.createElement('option');
             opt.value = s;
             opt.textContent = s;
-            if (disabledSet.has(s)) {
-                opt.disabled = true;
-                opt.textContent = `${s} (unavailable)`;
-            }
             timeSelect.appendChild(opt);
         });
         timeSelect.disabled = false;
-        if (prev && !disabledSet.has(prev)) timeSelect.value = prev;
+        if (prev && (availableSet === null || availableSet.has(prev))) timeSelect.value = prev;
     }
 
-    // Mostrar todos los horarios al cargar
-    populateAllSlots();
+    // Mostrar todos los horarios al cargar (sin restricciones aún)
+    populateSlots(null);
 
-    // Cargar horarios disponibles (filtrar los ocupados)
+    // Cargar horarios disponibles (solo muestra los libres)
     async function loadSlots() {
         const barberId = barberSelect.value;
         const date     = dateInput.value;
 
-        // Sin barbero o fecha: mostrar todos habilitados
         if (!barberId || !date) {
-            populateAllSlots();
+            populateSlots(null);
             return;
         }
 
         timeSelect.disabled = true;
-        timeSelect.innerHTML = '<option value="">Loading available times...</option>';
+        timeSelect.innerHTML = '<option value="">Checking availability...</option>';
 
         try {
             const res = await fetch(`${API_URL}/appointments/available-slots?barberId=${barberId}&appointmentDate=${date}`);
             const data = await res.json();
-            const available = new Set(data.availableSlots || []);
-            const booked = new Set(ALL_SLOTS.filter(s => !available.has(s)));
-            populateAllSlots(booked);
+            populateSlots(new Set(data.availableSlots || []));
         } catch (err) {
-            // Si falla la API, mostrar todos los slots igualmente
-            populateAllSlots();
+            populateSlots(null);
         }
     }
 
@@ -252,9 +251,13 @@ function initBookingForm() {
             if (response.ok) {
                 showFeedback(`Booking confirmed! Your appointment ID is #${result.id}. We will contact you to confirm.`, true);
                 form.reset();
-                timeSelect.innerHTML = '<option value="">Select barber and date first</option>';
-                timeSelect.disabled = true;
                 dateInput.min = new Date().toISOString().split('T')[0];
+                // Recargar slots para reflejar la nueva reserva
+                await loadSlots();
+            } else if (response.status === 400) {
+                showFeedback('That time slot is already taken. Please choose another time.', false);
+                // Recargar slots para mostrar el estado actualizado
+                await loadSlots();
             } else {
                 showFeedback(result.detail || 'Error creating booking. Please try again.', false);
             }
