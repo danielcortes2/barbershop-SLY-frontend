@@ -321,7 +321,7 @@ function updatePagination(count) {
  * ACCIONES DE CITAS
  */
 async function cancelAppointment(id) {
-    if (!confirm('Cancelar esta cita?')) return;
+    if (!confirm('Cancelar esta cita?\nEl horario quedara libre.')) return;
     try {
         const response = await fetch(`${API_URL}/appointments/${id}`, {
             method: 'PUT',
@@ -338,7 +338,7 @@ async function cancelAppointment(id) {
 }
 
 async function deleteAppointment(id) {
-    if (!confirm('Eliminar esta cita permanentemente?')) return;
+    if (!confirm('Eliminar esta cita permanentemente?\nEl horario quedara libre y no se podra deshacer.')) return;
     try {
         const response = await fetch(`${API_URL}/appointments/${id}`, { method: 'DELETE' });
         if (!response.ok) throw new Error('Error al eliminar');
