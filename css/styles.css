@@ -188,6 +188,32 @@ input, textarea, select {
     color: var(--color-dark);
 }
 
+/* Botón visible sobre fondos claros (panel admin) */
+.btn-ghost {
+    background-color: transparent;
+    border: 1.5px solid var(--color-gray-400);
+    color: var(--color-gray-700);
+}
+
+.btn-ghost:hover {
+    background-color: var(--color-gray-200);
+    border-color: var(--color-gray-500);
+    color: var(--color-dark);
+}
+
+/* Botón eliminar (rojo suave) visible sobre fondos blancos */
+.btn-delete {
+    background-color: #fee2e2;
+    border: 1.5px solid #fca5a5;
+    color: #b91c1c;
+}
+
+.btn-delete:hover {
+    background-color: #fca5a5;
+    border-color: #ef4444;
+    color: #7f1d1d;
+}
+
 .btn-outline-light {
     background-color: transparent;
     border-color: var(--color-white);

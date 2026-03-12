@@ -274,11 +274,11 @@ function displayAppointments(appointments) {
                 <div class="appointment-actions">
                     ${!isCancelled ? `
                         <button class="btn btn-sm btn-danger" onclick="cancelAppointment(${apt.id})">
-                            <i class="fas fa-times"></i> Cancelar
+                            <i class="fas fa-times"></i> Cancel
                         </button>
                     ` : ''}
-                    <button class="btn btn-sm btn-outline" onclick="deleteAppointment(${apt.id})">
-                        <i class="fas fa-trash"></i> Eliminar
+                    <button class="btn btn-sm btn-delete" onclick="deleteAppointment(${apt.id})">
+                        <i class="fas fa-trash"></i> Delete
                     </button>
                 </div>
             </div>

@@ -149,19 +149,21 @@
                         <label for="filterStatus">Status:</label>
                         <select id="filterStatus" class="filter-input">
                             <option value="">All</option>
-                            <option value="confirmada">Confirmed</option>
-                            <option value="cancelada">Cancelled</option>
+                            <option value="confirmed">Confirmed</option>
+                            <option value="pending">Pending</option>
+                            <option value="cancelled">Cancelled</option>
+                            <option value="completed">Completed</option>
                         </select>
                     </div>
                     <button class="btn btn-primary" id="applyFilters">
                         <i class="fas fa-filter"></i>
                         Apply Filters
                     </button>
-                    <button class="btn btn-outline" id="clearFilters">
+                    <button class="btn btn-ghost" id="clearFilters">
                         <i class="fas fa-times"></i>
                         Clear
                     </button>
-                    <button class="btn btn-outline" id="refreshBtn">
+                    <button class="btn btn-ghost" id="refreshBtn">
                         <i class="fas fa-sync-alt"></i>
                         Refresh
                     </button>
@@ -177,12 +179,12 @@
 
                 <!-- Pagination -->
                 <div class="appointments-pagination" id="appointmentsPagination" style="display: none;">
-                    <button class="btn btn-outline" id="prevPage">
+                    <button class="btn btn-ghost" id="prevPage">
                         <i class="fas fa-chevron-left"></i>
                         Previous
                     </button>
                     <span class="pagination-info" id="paginationInfo">Page 1</span>
-                    <button class="btn btn-outline" id="nextPage">
+                    <button class="btn btn-ghost" id="nextPage">
                         Next
                         <i class="fas fa-chevron-right"></i>
                     </button>
