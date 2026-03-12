@@ -252,15 +252,4 @@ function showMessage(message, type = 'info') {
 // =====================================================
 // INICIALIZACIÓN: Ejecutar cuando el DOM esté listo
 // =====================================================
-document.addEventListener('DOMContentLoaded', async () => {
-  await initForm();
-
-  // Pre-rellenar campos si vienen por query params (desde index.html)
-  const params = new URLSearchParams(window.location.search);
-  if (params.get('name'))  document.getElementById('clientName').value = params.get('name');
-  if (params.get('phone')) document.getElementById('clientPhone').value = params.get('phone');
-  if (params.get('date'))  {
-    document.getElementById('appointmentDate').value = params.get('date');
-    await loadAvailableSlots();
-  }
-});
+document.addEventListener('DOMContentLoaded', initForm);

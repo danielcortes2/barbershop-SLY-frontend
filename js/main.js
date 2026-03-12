@@ -104,18 +104,7 @@ function initBookingForm() {
 
     form.addEventListener('submit', function(e) {
         e.preventDefault();
-
-        const formData = new FormData(form);
-        const data = Object.fromEntries(formData.entries());
-
-        // Redirigir a la página de reserva completa pasando los datos básicos
-        const params = new URLSearchParams();
-        if (data.name)  params.set('name', data.name);
-        if (data.phone) params.set('phone', data.phone);
-        if (data.date)  params.set('date', data.date);
-        if (data.time)  params.set('time', data.time);
-
-        window.location.href = `reserva.html?${params.toString()}`;
+        window.location.href = 'reserva.html';
     });
 }
 
